@@ -46,3 +46,8 @@ app.post('/update', (req, res) => {
     sendUpdate(number); // 發送更新給所有 WebSocket 客戶端
     res.status(200).send('Update sent');
 });
+
+app.post('/test', (req, res) => {
+    res.status(200).send('Test successful');
+});
+
