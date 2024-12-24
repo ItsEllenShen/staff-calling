@@ -7,7 +7,7 @@ const port = process.env.PORT || 8080;
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
-}
+});
 
 // 啟動 HTTP 伺服器
 const server = app.listen(port, () => {
