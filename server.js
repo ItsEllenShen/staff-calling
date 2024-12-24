@@ -35,16 +35,16 @@ wss.on('connection', ws => {
     });
   };
 
-  // 監聽來自工作人員頁面的更新，並傳遞給所有前端頁面
-  app.use(express.json()); // 確保解析 JSON 請求體
+// 監聽來自工作人員頁面的更新，並傳遞給所有前端頁面
+app.use(express.json()); // 確保解析 JSON 請求體
 
-  app.post('/update', (req, res) => {
-    const { number } = req.body;
-    if (number) {
-      sendUpdate(number);
-      res.status(200).send('Update sent');
-    } else {
-      res.status(400).send('No number provided');
-    }
-  });
+app.post('/update', (req, res) => {
+  const { number } = req.body;
+  if (number) {
+    sendUpdate(number);
+    res.status(200).send('Update sent');
+  } else {
+    res.status(400).send('No number provided');
+  }
+});
 });
