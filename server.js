@@ -40,6 +40,8 @@ app.use(express.json()); // 確保解析 JSON 請求體
 
 // 路由應該在 WebSocket 伺服器外部
 app.post('/update', (req, res) => {
+    console.log('Received POST request at /update');
+    console.log(req.body); // 確認請求體內容
     const { number } = req.body;
     sendUpdate(number); // 發送更新給所有 WebSocket 客戶端
     res.status(200).send('Update sent');
