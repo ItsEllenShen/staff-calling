@@ -20,7 +20,6 @@ wss.on('connection', ws => {
   // 處理接收到的消息
   ws.on('message', message => {
     console.log(`Received message: ${message}`);
-    // 在這裡可以根據消息來執行不同的操作
   });
 
   // 向所有連接的客戶端發送訊息
@@ -33,9 +32,15 @@ wss.on('connection', ws => {
   };
 
   // 監聽來自工作人員頁面的更新，並傳遞給所有前端頁面
-  app.post('/update', express.json(), (req, res) => {
+  app.use(express.json()); // 確保解析 JSON 請求體
+
+  app.post('/update', (req, res) => {
     const { number } = req.body;
-    sendUpdate(number);
-    res.status(200).send('Update sent');
+    if (number) {
+      sendUpdate(number);
+      res.status(200).send('Update sent');
+    } else {
+      res.status(400).send('No number provided');
+    }
   });
 });
