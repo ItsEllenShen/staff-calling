@@ -1,9 +1,17 @@
 const WebSocket = require('ws');
 const express = require('express');
+const cors = require('cors');  // 引入 cors 模組
 
 // 初始化 Express 應用
 const app = express();
 const port = process.env.PORT || 8080;
+
+// 啟用 CORS，允許來自指定域名的請求
+app.use(cors({
+  origin: 'https://itsellenshen.github.io/calling-number/', // 替換為您的前端域名
+  methods: ['GET', 'POST'], // 允許的 HTTP 方法
+  allowedHeaders: ['Content-Type'], // 允許的標頭
+}));
 
 app.use(express.json()); // 確保解析 JSON 請求體
 
