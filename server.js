@@ -68,8 +68,16 @@ wss.on('connection', ws => {
   ws.send(JSON.stringify({ type: 'update', number: '0' }));
 
   ws.on('message', message => {
-    console.log(`Received message: ${message}`);
-  });
+      console.log(`Received message: ${message}`);
+      try {
+        const data = JSON.parse(message);
+        if (data.type === 'update' && data.number) {
+          sendUpdate(data.number); // 確保廣播邏輯被調用
+        }
+      } catch (error) {
+        console.error('Error parsing message:', error);
+      }
+    });
   
   ws.on('close', () => {
     console.log(`Client disconnected. Remaining clients: ${wss.clients.size}`);
