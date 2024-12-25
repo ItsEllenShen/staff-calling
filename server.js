@@ -62,7 +62,7 @@ app.post('/test', (req, res) => {
 
 // 處理 WebSocket 連接
 wss.on('connection', ws => {
-  console.log('Client connected. Total clients: ${wss.clients.size}`);
+  console.log(`Client connected. Total clients: ${wss.clients.size}`);
 
   // 當有客戶端連接時，發送一個初始化消息
   ws.send(JSON.stringify({ type: 'update', number: '0' }));
