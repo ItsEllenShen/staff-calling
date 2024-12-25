@@ -11,6 +11,14 @@ ws.addEventListener('open', () => {
   console.log('WebSocket connection established for staff');
 });
 
+ws.addEventListener('error', (error) => {
+  console.error('WebSocket error:', error);
+});
+
+ws.addEventListener('close', () => {
+  console.log('WebSocket connection closed');
+});
+
 numberButtons.forEach(button => {
     button.addEventListener("click", () => {
       const value = button.dataset.value; // 取得按鈕的數字
@@ -28,8 +36,9 @@ input.value = currentNumber; // 更新輸入框顯示
 enterButton.addEventListener("click", () => {
   const number = input.value;
     if (currentNumber) { // 確保欄位不是空的
-        sound.play();
+        console.log(`Sending update to server: ${number}`);
         ws.send(JSON.stringify({ type: 'update', number}));
+        sound.play();
         currentNumber = ""; // 清空數字
         input.value = ""; // 清空輸入框
     } else {
