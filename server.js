@@ -8,7 +8,7 @@ const port = process.env.PORT || 8080;
 
 // 啟用 CORS，允許來自指定域名的請求
 app.use(cors({
-  origin: 'https://itsellenshen.github.io/calling-number/', // 替換為您的前端域名
+  origin: 'https://itsellenshen.github.io', // 替換為您的前端域名
   methods: ['GET', 'POST'], // 允許的 HTTP 方法
   allowedHeaders: ['Content-Type'], // 允許的標頭
 }));
@@ -25,9 +25,11 @@ const wss = new WebSocket.Server({ server });
 
 // 定義向所有客戶端發送 WebSocket 訊息的函數
 const sendUpdate = (number) => {
+  console.log(`Sending update: ${number}`);
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({ type: 'update', number }));
+      console.log(`Sent update to client: ${number}`);
     }
   });
 };
@@ -58,8 +60,11 @@ app.post('/test', (req, res) => {
 wss.on('connection', ws => {
   console.log('Client connected');
 
-  // 處理接收到的消息
+  // 當有客戶端連接時，發送一個初始化消息
+  ws.send(JSON.stringify({ type: 'update', number: '0' }));
+
   ws.on('message', message => {
     console.log(`Received message: ${message}`);
   });
 });
+
