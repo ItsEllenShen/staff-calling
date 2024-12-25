@@ -25,11 +25,14 @@ const wss = new WebSocket.Server({ server });
 
 // 定義向所有客戶端發送 WebSocket 訊息的函數
 const sendUpdate = (number) => {
-  console.log(`Sending update: ${number}`);
+  console.log(`Attempting to send update: ${number}`);
+  console.log(`Number of clients: ${wss.clients.size}`);
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({ type: 'update', number }));
-      console.log(`Sent update to client: ${number}`);
+      console.log(`Message sent to client: ${JSON.stringify({ type: 'update', number })}`);
+    } else {
+      console.log('Client is not ready to receive messages.');
     }
   });
 };
@@ -45,6 +48,7 @@ app.post('/update', (req, res) => {
   console.log(req.body); // 確認請求體內容
   const { number } = req.body;
   if (!number) {
+    console.error('Number is missing in the request body.');
     return res.status(400).send('Number is required');
   }
   sendUpdate(number); // 發送更新給所有 WebSocket 客戶端
@@ -58,13 +62,17 @@ app.post('/test', (req, res) => {
 
 // 處理 WebSocket 連接
 wss.on('connection', ws => {
-  console.log('Client connected');
+  console.log('Client connected. Total clients: ${wss.clients.size}`);
 
   // 當有客戶端連接時，發送一個初始化消息
   ws.send(JSON.stringify({ type: 'update', number: '0' }));
 
   ws.on('message', message => {
     console.log(`Received message: ${message}`);
+  });
+  
+  ws.on('close', () => {
+    console.log(`Client disconnected. Remaining clients: ${wss.clients.size}`);
   });
 });
 
