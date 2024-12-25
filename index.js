@@ -7,6 +7,10 @@ const ws = new WebSocket('wss://staff-calling.onrender.com');
 
 let currentNumber = "";
 
+ws.addEventListener('open', () => {
+  console.log('WebSocket connection established for staff');
+});
+
 numberButtons.forEach(button => {
     button.addEventListener("click", () => {
       const value = button.dataset.value; // 取得按鈕的數字
