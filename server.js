@@ -55,6 +55,11 @@ app.post('/update', (req, res) => {
   res.status(200).send('Update sent');
 });
 
+// 定義 /ping 路由
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 // 定義 /test 路由
 app.post('/test', (req, res) => {
   res.status(200).send('Test successful');
@@ -83,4 +88,12 @@ wss.on('connection', ws => {
     console.log(`Client disconnected. Remaining clients: ${wss.clients.size}`);
   });
 });
+
+// 心跳機制：每 5 分鐘發送一次 /ping 請求
+setInterval(() => {
+  // 使用 axios 或 node-fetch 發送心跳請求，這裡用的是 Node.js 的 http 模組發送請求
+  require('http').get(`http://localhost:${port}/ping`, (response) => {
+    console.log('Ping request sent');
+  });
+}, 5 * 60 * 1000); // 每 5 分鐘發送一次
 
